@@ -1,13 +1,24 @@
+
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import type { Product } from '../../types/product'
 
-defineProps<{
+const props = defineProps<{
   product: Product
 }>()
+
+const router = useRouter()
+
+function openProduct() {
+  router.push(`/product/${props.product.id}`)
+}
 </script>
 
 <template>
-  <div class="rounded-lg border p-4 shadow-sm">
+  <div
+    class="cursor-pointer rounded-lg border p-4 shadow-sm transition hover:shadow-md"
+    @click="openProduct"
+  >
     <img
       :src="product.thumbnail"
       :alt="product.title"
