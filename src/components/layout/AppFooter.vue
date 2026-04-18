@@ -1,3 +1,4 @@
+
 <template>
   <footer class="mt-12 border-t border-stone-200 bg-[#ece8d8]">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-6">

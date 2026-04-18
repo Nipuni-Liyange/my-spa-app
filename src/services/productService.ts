@@ -2,7 +2,7 @@ import api from './api'
 import type { ProductsResponse, Product } from '../types/product'
 
 export async function fetchProducts(): Promise<ProductsResponse> {
-  const response = await api.get<ProductsResponse>('/products')
+  const response = await api.get<ProductsResponse>('/products?limit=100')
   return response.data
 }
 
