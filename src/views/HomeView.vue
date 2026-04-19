@@ -19,6 +19,19 @@ const showAll = ref(false)
 const menuOpen = ref(false)
 const darkMode = ref(localStorage.getItem('darkMode') === 'true')
 
+const fashionCategories = [
+  'mens-shirts',
+  'womens-dresses',
+  'tops',
+  'mens-shoes',
+  'womens-shoes',
+  'beauty',
+  'womens-watches',
+  'mens-watches',
+  'womens-bags',
+  'womens-jewellery',
+]
+
 const categoryMap: Record<string, string[]> = {
   Clothes: [
     'mens-shirts',
@@ -31,10 +44,6 @@ const categoryMap: Record<string, string[]> = {
   ],
   Others: [
     'beauty',
-    'fragrances',
-    'groceries',
-    'home-decoration',
-    'furniture',
     'womens-watches',
     'mens-watches',
     'womens-bags',
@@ -51,18 +60,44 @@ watch(
   { immediate: true }
 )
 
+const fashionProducts = computed(() => {
+  return products.value.filter(product =>
+    fashionCategories.includes(product.category)
+  )
+})
+
 const baseProducts = computed(() => {
-  if (showAll.value) return products.value
+  if (showAll.value) return fashionProducts.value
+
   const mappedCategories = categoryMap[selectedCategory.value] || []
   return products.value.filter(product => mappedCategories.includes(product.category))
 })
 
-const filteredProducts = computed(() => {
+const searchedProducts = computed(() => {
   const q = searchTerm.value.trim().toLowerCase()
+
   if (!q) return baseProducts.value
+
   return baseProducts.value.filter(product =>
     product.title.toLowerCase().includes(q)
   )
+})
+
+const displayedProducts = computed(() => {
+  return showAll.value ? searchedProducts.value : searchedProducts.value.slice(0, 8)
+})
+
+const categoryImages = computed(() => {
+  return {
+    Clothes:
+      products.value.find(p => ['mens-shirts', 'womens-dresses', 'tops'].includes(p.category))?.thumbnail || '',
+    Footwear:
+      products.value.find(p => ['mens-shoes', 'womens-shoes'].includes(p.category))?.thumbnail || '',
+    Others:
+      products.value.find(p =>
+        ['beauty', 'womens-watches', 'mens-watches', 'womens-bags', 'womens-jewellery'].includes(p.category)
+      )?.thumbnail || '',
+  }
 })
 
 function selectCategory(category: string) {
@@ -102,6 +137,8 @@ onMounted(async () => {
       :search-term="searchTerm"
       :dark-mode="darkMode"
       :menu-open="menuOpen"
+      :show-search="true"
+      current-page="home"
       @update:search-term="searchTerm = $event"
       @toggle-dark="toggleDark"
       @toggle-menu="toggleMenu"
@@ -111,16 +148,17 @@ onMounted(async () => {
 
     <CategoryList
       :selected-category="selectedCategory"
+      :category-images="categoryImages"
       @select-category="selectCategory"
     />
 
     <div class="mx-auto mt-8 max-w-7xl px-6">
       <div class="flex items-center justify-between">
         <h2 class="text-2xl font-semibold text-stone-800 dark:text-white">
-          {{ showAll ? 'All Products' : selectedCategory }}
+          {{ showAll ? 'Explore Collection' : selectedCategory }}
         </h2>
         <p class="text-sm text-stone-500 dark:text-stone-300">
-          {{ filteredProducts.length }} items
+          {{ displayedProducts.length }} items
         </p>
       </div>
     </div>
@@ -131,12 +169,12 @@ onMounted(async () => {
     </div>
 
     <ProductGrid
-      v-if="!loading && !error && filteredProducts.length > 0"
-      :products="filteredProducts.slice(0, 8)"
+      v-if="!loading && !error && displayedProducts.length > 0"
+      :products="displayedProducts"
     />
 
     <p
-      v-else-if="!loading && !error && filteredProducts.length === 0"
+      v-else-if="!loading && !error && displayedProducts.length === 0"
       class="mx-auto mt-8 max-w-7xl px-6 text-stone-500 dark:text-stone-300"
     >
       Product not available.

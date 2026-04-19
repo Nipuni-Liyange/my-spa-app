@@ -39,7 +39,7 @@ async function handleLogin() {
         <input
           v-model="username"
           type="text"
-          placeholder="Enter your username"
+          placeholder="Enter DummyJSON username"
           class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none transition focus:border-[#9b7a5a]"
         />
       </div>
@@ -51,7 +51,7 @@ async function handleLogin() {
         <input
           v-model="password"
           type="password"
-          placeholder="Enter your password"
+          placeholder="Enter password"
           class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none transition focus:border-[#9b7a5a]"
         />
       </div>
@@ -70,7 +70,7 @@ async function handleLogin() {
     </form>
 
     <div class="mt-8 text-center text-sm text-stone-500">
-      Demo fashion login page
+      After login, the header will show Log Out.
     </div>
   </div>
 </template>

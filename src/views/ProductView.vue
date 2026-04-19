@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { fetchProductById } from '../services/productService'
 import { useCartStore } from '../stores/cart'
@@ -12,6 +12,17 @@ const cartStore = useCartStore()
 const product = ref<Product | null>(null)
 const loading = ref(false)
 const error = ref('')
+const addedMessage = ref('')
+
+const darkMode = ref(localStorage.getItem('darkMode') === 'true')
+
+watch(
+  darkMode,
+  (value) => {
+    document.documentElement.classList.toggle('dark', value)
+  },
+  { immediate: true }
+)
 
 onMounted(async () => {
   try {
@@ -28,7 +39,10 @@ onMounted(async () => {
 function handleAddToCart() {
   if (product.value) {
     cartStore.addToCart(product.value)
-    alert('Added to cart!')
+    addedMessage.value = 'Product added to cart successfully.'
+    setTimeout(() => {
+      addedMessage.value = ''
+    }, 2000)
   }
 }
 
@@ -39,13 +53,20 @@ function goBack() {
 
 <template>
   <div class="min-h-screen bg-[#f5f1e8] p-6 dark:bg-[#181512]">
-    <div class="mx-auto mb-6 max-w-5xl">
+    <div class="mx-auto mb-6 flex max-w-5xl items-center justify-between">
       <button
         @click="goBack"
         class="rounded-full border border-stone-300 px-4 py-2 text-sm text-stone-700 dark:border-stone-600 dark:text-white"
       >
         ← Back
       </button>
+
+      <p
+        v-if="addedMessage"
+        class="rounded-full bg-green-100 px-4 py-2 text-sm text-green-700 dark:bg-green-900/40 dark:text-green-300"
+      >
+        {{ addedMessage }}
+      </p>
     </div>
 
     <p v-if="loading" class="dark:text-white">Loading product...</p>
