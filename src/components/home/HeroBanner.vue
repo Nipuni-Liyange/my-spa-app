@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const emit = defineEmits<{
+  (e: 'explore'): void
+}>()
+</script>
+
 <template>
   <section class="mx-auto mt-8 max-w-7xl px-6">
     <div class="grid min-h-[320px] overflow-hidden rounded-[28px] md:grid-cols-3">
@@ -10,7 +16,10 @@
             <br />
             the Magic of Fashion
           </h2>
-          <button class="mt-6 rounded-md bg-blue-500 px-5 py-2 text-sm text-white">
+          <button
+            @click="emit('explore')"
+            class="mt-6 rounded-md bg-blue-500 px-5 py-2 text-sm text-white"
+          >
             Explore Collection
           </button>
         </div>
