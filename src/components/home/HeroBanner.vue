@@ -18,7 +18,7 @@ const emit = defineEmits<{
           </h2>
           <button
             @click="emit('explore')"
-            class="mt-6 rounded-md bg-blue-500 px-5 py-2 text-sm text-white"
+            class="mt-6 rounded-md bg-[#b79a72] px-5 py-2 text-sm text-white transition hover:bg-[#a98b64]"
           >
             Explore Collection
           </button>
@@ -35,3 +35,4 @@ const emit = defineEmits<{
     </div>
   </section>
 </template>
+

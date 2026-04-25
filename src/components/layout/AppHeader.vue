@@ -45,7 +45,7 @@ const emit = defineEmits<{
         <nav class="flex items-center gap-6 text-sm text-stone-700 dark:text-stone-200">
           <a
             href="/"
-            :class="currentPage === 'home' ? 'text-blue-500' : 'text-stone-700 dark:text-stone-200'"
+            :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
           >
             HOME
           </a>
@@ -53,7 +53,7 @@ const emit = defineEmits<{
           <a
             href="/cart"
             class="flex items-center gap-2"
-            :class="currentPage === 'cart' ? 'text-blue-500' : 'text-stone-700 dark:text-stone-200'"
+            :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
           >
             <span>🛒</span>
             <span>CART</span>
