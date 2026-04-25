@@ -44,7 +44,7 @@ const cartStore = useCartStore()
 
     <div class="text-right">
       <p class="text-lg font-semibold text-[#9b5d52]">
-        ${{ item.product.price * item.quantity }}
+        ${{ (item.product.price * item.quantity).toFixed(2) }}
       </p>
 
       <button
