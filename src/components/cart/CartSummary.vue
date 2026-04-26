@@ -3,8 +3,19 @@ import { ref } from 'vue'
 import { useCartStore } from '../../stores/cart'
 
 const cartStore = useCartStore()
+
 const showCheckoutForm = ref(false)
 const successMessage = ref('')
+
+const fullName = ref('')
+const phoneNumber = ref('')
+const email = ref('')
+const address = ref('')
+
+const paymentMethod = ref<'card' | 'cod'>('card')
+const cardNumber = ref('')
+const expiryDate = ref('')
+const cvv = ref('')
 
 function openCheckoutForm() {
   showCheckoutForm.value = true
@@ -16,7 +27,11 @@ function closeCheckoutForm() {
 }
 
 function confirmPayment() {
-  successMessage.value = 'Payment successful!'
+  successMessage.value =
+    paymentMethod.value === 'card'
+      ? 'Payment successful!'
+      : 'Order placed successfully with Cash on Delivery!'
+
   setTimeout(() => {
     successMessage.value = ''
     showCheckoutForm.value = false
@@ -60,13 +75,16 @@ function confirmPayment() {
 
     <div
       v-if="showCheckoutForm"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
     >
-      <div class="w-full max-w-3xl rounded-2xl bg-white p-6 shadow-xl dark:bg-[#241f1b]">
-        <div class="mb-6 flex items-center justify-between">
+      <div
+        class="w-full max-w-3xl rounded-2xl bg-white p-5 shadow-xl dark:bg-[#241f1b]"
+      >
+        <div class="mb-4 flex items-center justify-between">
           <h3 class="text-2xl font-semibold text-stone-800 dark:text-white">
             Payment Details
           </h3>
+
           <button
             @click="closeCheckoutForm"
             class="text-xl text-stone-500 hover:text-stone-700 dark:text-stone-300"
@@ -77,112 +95,150 @@ function confirmPayment() {
 
         <p
           v-if="successMessage"
-          class="mb-4 rounded-xl bg-green-100 px-4 py-3 text-sm font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300"
+          class="mb-3 rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300"
         >
           {{ successMessage }}
         </p>
 
-        <div class="grid gap-5 md:grid-cols-2">
-          <div>
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              Full Name
-            </label>
-            <input
-              type="text"
-              placeholder="Enter full name"
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            />
-          </div>
+        <!-- Delivery Information -->
+        <div class="rounded-2xl border border-stone-300 p-4 dark:border-stone-700">
+          <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
+            Delivery Information
+          </h4>
 
-          <div>
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              Email
-            </label>
-            <input
-              type="email"
-              placeholder="Enter email"
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            />
-          </div>
+          <div class="grid gap-4 md:grid-cols-2">
+            <div>
+              <label class="mb-1 block text-sm font-medium text-stone-600 dark:text-stone-300">
+                Full Name
+              </label>
+              <input
+                v-model="fullName"
+                type="text"
+                placeholder="Enter full name"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+              />
+            </div>
 
-          <div>
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              Phone Number
-            </label>
-            <input
-              type="text"
-              placeholder="Enter phone number"
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            />
-          </div>
+            <div>
+              <label class="mb-1 block text-sm font-medium text-stone-600 dark:text-stone-300">
+                Phone Number
+              </label>
+              <input
+                v-model="phoneNumber"
+                type="text"
+                placeholder="Enter phone number"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+              />
+            </div>
 
-          <div>
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              Payment Method
-            </label>
-            <select
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            >
-              <option>Visa</option>
-              <option>MasterCard</option>
-              <option>Debit Card</option>
-              <option>Cash on Delivery</option>
-            </select>
-          </div>
+            <div>
+              <label class="mb-1 block text-sm font-medium text-stone-600 dark:text-stone-300">
+                Email
+              </label>
+              <input
+                v-model="email"
+                type="email"
+                placeholder="Enter email"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+              />
+            </div>
 
-          <div class="md:col-span-2">
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              Address
-            </label>
-            <input
-              type="text"
-              placeholder="Enter full address"
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            />
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              Card Number
-            </label>
-            <input
-              type="text"
-              placeholder="1234 5678 9012 3456"
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            />
-          </div>
-
-          <div>
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              Expiry Date
-            </label>
-            <input
-              type="text"
-              placeholder="MM/YY"
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            />
-          </div>
-
-          <div>
-            <label class="mb-2 block text-sm font-medium text-stone-600 dark:text-stone-300">
-              CVV
-            </label>
-            <input
-              type="password"
-              placeholder="123"
-              class="w-full rounded-xl border border-stone-300 px-4 py-3 outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
-            />
+            <div>
+              <label class="mb-1 block text-sm font-medium text-stone-600 dark:text-stone-300">
+                Delivery Address
+              </label>
+              <input
+                v-model="address"
+                type="text"
+                placeholder="Enter full address"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+              />
+            </div>
           </div>
         </div>
 
-        <div class="mt-6 flex items-center justify-between border-t border-stone-200 pt-4 dark:border-stone-700">
-          <p class="text-lg font-semibold text-stone-800 dark:text-white">
+        <!-- Payment Method -->
+        <div class="mt-4 rounded-2xl border border-stone-300 p-4 dark:border-stone-700">
+          <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
+            Payment Method
+          </h4>
+
+          <div class="grid gap-3 md:grid-cols-2">
+            <button
+              type="button"
+              @click="paymentMethod = 'card'"
+              class="rounded-xl border px-4 py-3 text-left transition"
+              :class="
+                paymentMethod === 'card'
+                  ? 'border-[#2f6f4f] bg-[#edf7f1] dark:bg-[#1f3328]'
+                  : 'border-stone-300 bg-white dark:border-stone-600 dark:bg-[#2d2824]'
+              "
+            >
+              <p class="text-sm font-semibold text-stone-800 dark:text-white">Credit/Debit Card</p>
+            </button>
+
+            <button
+              type="button"
+              @click="paymentMethod = 'cod'"
+              class="rounded-xl border px-4 py-3 text-left transition"
+              :class="
+                paymentMethod === 'cod'
+                  ? 'border-[#2f6f4f] bg-[#edf7f1] dark:bg-[#1f3328]'
+                  : 'border-stone-300 bg-white dark:border-stone-600 dark:bg-[#2d2824]'
+              "
+            >
+              <p class="text-sm font-semibold text-stone-800 dark:text-white">Cash on Delivery</p>
+            </button>
+          </div>
+
+          <div v-if="paymentMethod === 'card'" class="mt-4 grid gap-4 md:grid-cols-2">
+            <div class="md:col-span-2">
+              <label class="mb-1 block text-sm font-medium text-stone-600 dark:text-stone-300">
+                Card Number
+              </label>
+              <input
+                v-model="cardNumber"
+                type="text"
+                placeholder="0000 0000 0000 0000"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label class="mb-1 block text-sm font-medium text-stone-600 dark:text-stone-300">
+                Expiry Date
+              </label>
+              <input
+                v-model="expiryDate"
+                type="text"
+                placeholder="MM/YY"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+              />
+            </div>
+
+            <div>
+              <label class="mb-1 block text-sm font-medium text-stone-600 dark:text-stone-300">
+                CVV
+              </label>
+              <input
+                v-model="cvv"
+                type="password"
+                placeholder="***"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="mt-4 flex items-center justify-between rounded-2xl border border-stone-300 p-4 dark:border-stone-700">
+          <p class="text-xl font-semibold text-stone-800 dark:text-white">
             Total: ${{ cartStore.total.toFixed(2) }}
           </p>
 
           <button
             @click="confirmPayment"
-            class="rounded-full bg-[#b79a72] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a98b64]"
+            class="rounded-full bg-[#b79a72] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#a98b64]"
           >
             Confirm Payment
           </button>
