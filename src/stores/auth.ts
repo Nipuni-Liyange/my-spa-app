@@ -32,6 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       localStorage.setItem('token', token.value)
       localStorage.setItem('user', JSON.stringify(user.value))
+
       return true
     } catch (err) {
       error.value = 'Invalid username or password.'

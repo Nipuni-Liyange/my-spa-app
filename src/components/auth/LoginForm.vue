@@ -70,7 +70,7 @@ async function handleLogin() {
     </form>
 
     <div class="mt-8 text-center text-sm text-stone-500">
-      After login, the header will show Log Out.
+      Demo login: emilys / emilyspass
     </div>
   </div>
 </template>
