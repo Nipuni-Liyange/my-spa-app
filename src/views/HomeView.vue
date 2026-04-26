@@ -13,7 +13,7 @@ const products = ref<Product[]>([])
 const loading = ref(false)
 const error = ref('')
 
-const selectedCategory = ref('Clothes')
+const selectedCategory = ref('')
 const searchTerm = ref('')
 const showAll = ref(false)
 
@@ -58,7 +58,7 @@ watch(
 )
 
 const fashionProducts = computed(() => {
-  return products.value.filter(product =>
+  return products.value.filter((product) =>
     fashionCategories.includes(product.category)
   )
 })
@@ -67,7 +67,9 @@ const baseProducts = computed(() => {
   if (showAll.value) return fashionProducts.value
 
   const mappedCategories = categoryMap[selectedCategory.value] || []
-  return products.value.filter(product => mappedCategories.includes(product.category))
+  return products.value.filter((product) =>
+    mappedCategories.includes(product.category)
+  )
 })
 
 const searchedProducts = computed(() => {
@@ -75,7 +77,7 @@ const searchedProducts = computed(() => {
 
   if (!q) return baseProducts.value
 
-  return baseProducts.value.filter(product =>
+  return baseProducts.value.filter((product) =>
     product.title.toLowerCase().includes(q)
   )
 })
@@ -87,12 +89,18 @@ const displayedProducts = computed(() => {
 const categoryImages = computed(() => {
   return {
     Clothes:
-      products.value.find(p => ['mens-shirts', 'womens-dresses', 'tops'].includes(p.category))?.thumbnail || '',
+      products.value.find((p) =>
+        ['mens-shirts', 'womens-dresses', 'tops'].includes(p.category)
+      )?.thumbnail || '',
     Footwear:
-      products.value.find(p => ['mens-shoes', 'womens-shoes'].includes(p.category))?.thumbnail || '',
+      products.value.find((p) =>
+        ['mens-shoes', 'womens-shoes'].includes(p.category)
+      )?.thumbnail || '',
     Others:
-      products.value.find(p =>
-        ['beauty', 'womens-watches', 'mens-watches', 'womens-bags', 'womens-jewellery'].includes(p.category)
+      products.value.find((p) =>
+        ['beauty', 'womens-watches', 'mens-watches', 'womens-bags', 'womens-jewellery'].includes(
+          p.category
+        )
       )?.thumbnail || '',
   }
 })
@@ -105,11 +113,13 @@ function selectCategory(category: string) {
 
 function exploreCollection() {
   showAll.value = true
+  selectedCategory.value = ''
   searchTerm.value = ''
 }
 
 function showAllProducts() {
   showAll.value = true
+  selectedCategory.value = ''
   searchTerm.value = ''
   menuOpen.value = false
 }
@@ -128,8 +138,8 @@ function openProduct(product: Product) {
 }
 
 function closeProductModal() {
-  showProductModal.value = false
   selectedProduct.value = null
+  showProductModal.value = false
 }
 
 onMounted(async () => {
@@ -168,13 +178,19 @@ onMounted(async () => {
       @select-category="selectCategory"
     />
 
-    <div class="mx-auto mt-8 max-w-7xl px-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-semibold text-stone-800 dark:text-white">
-          {{ showAll ? 'Explore Collection' : selectedCategory }}
-        </h2>
+    <div class="mx-auto mt-10 max-w-7xl px-6">
+      <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-sm uppercase tracking-[0.3em] text-[#9b5d52]">
+            Featured Edit
+          </p>
+          <h2 class="mt-2 text-3xl font-semibold text-stone-800 dark:text-white">
+            {{ showAll ? 'Explore Collection' : selectedCategory }}
+          </h2>
+        </div>
+
         <p class="text-sm text-stone-500 dark:text-stone-300">
-          {{ displayedProducts.length }} items
+          {{ displayedProducts.length }} items available
         </p>
       </div>
     </div>
