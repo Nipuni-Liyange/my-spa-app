@@ -13,7 +13,7 @@ const emit = defineEmits<{
 }>()
 
 const cartStore = useCartStore()
-const addedMessage = ref('')
+const showSuccessToast = ref(false)
 const quantity = ref(1)
 
 watch(
@@ -21,14 +21,14 @@ watch(
   (value) => {
     if (value) {
       quantity.value = 1
-      addedMessage.value = ''
+      showSuccessToast.value = false
     }
   }
 )
 
 function closeModal() {
   emit('close')
-  addedMessage.value = ''
+  showSuccessToast.value = false
   quantity.value = 1
 }
 
@@ -47,9 +47,10 @@ function handleAddToCart() {
     cartStore.addToCart(props.product)
   }
 
-  addedMessage.value = 'Added to cart successfully!'
+  showSuccessToast.value = true
+
   setTimeout(() => {
-    addedMessage.value = ''
+    showSuccessToast.value = false
   }, 1800)
 }
 </script>
@@ -57,7 +58,7 @@ function handleAddToCart() {
 <template>
   <div
     v-if="show && product"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/35 backdrop-blur-sm px-3 py-4"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-3 py-4 backdrop-blur-sm"
   >
     <div
       class="relative w-full max-w-[430px] rounded-2xl bg-white p-4 shadow-2xl sm:max-w-2xl sm:p-5 md:max-w-4xl dark:bg-[#241f1b]"
@@ -69,12 +70,27 @@ function handleAddToCart() {
         ✕
       </button>
 
-      <p
-        v-if="addedMessage"
-        class="mb-3 rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300"
+      <!-- Success message box -->
+      <div
+        v-if="showSuccessToast"
+        class="absolute left-1/2 top-4 z-10 w-[88%] max-w-sm -translate-x-1/2 rounded-2xl border border-green-200 bg-white px-4 py-3 shadow-lg dark:border-green-800 dark:bg-[#2d2824]"
       >
-        {{ addedMessage }}
-      </p>
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-300"
+          >
+            ✓
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-stone-800 dark:text-white">
+              Added to cart
+            </p>
+            <p class="text-xs text-stone-500 dark:text-stone-300">
+              Product added successfully.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div class="grid gap-4 md:grid-cols-2">
         <div class="rounded-2xl bg-stone-100 p-3 dark:bg-[#2d2824]">
