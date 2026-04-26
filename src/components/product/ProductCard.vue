@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import type { Product } from '../../types/product'
 
-const props = defineProps<{
+defineProps<{
   product: Product
 }>()
 
-const router = useRouter()
-
-function openProduct() {
-  router.push(`/product/${props.product.id}`)
-}
+const emit = defineEmits<{
+  (e: 'open-product', product: Product): void
+}>()
 </script>
 
 <template>
   <div
     class="cursor-pointer rounded-xl bg-white p-3 transition hover:-translate-y-1 hover:shadow-lg"
-    @click="openProduct"
+    @click="emit('open-product', product)"
   >
     <div class="overflow-hidden rounded-lg bg-stone-100">
       <img
@@ -33,7 +30,7 @@ function openProduct() {
     <p class="mt-1 text-xs text-stone-500">{{ product.category }}</p>
 
     <p class="mt-2 text-sm font-semibold text-[#9b5d52]">
-      ${{ product.price }}
+      ${{ product.price.toFixed(2) }}
     </p>
   </div>
 </template>

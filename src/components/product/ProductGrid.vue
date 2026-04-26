@@ -5,6 +5,10 @@ import type { Product } from '../../types/product'
 defineProps<{
   products: Product[]
 }>()
+
+const emit = defineEmits<{
+  (e: 'open-product', product: Product): void
+}>()
 </script>
 
 <template>
@@ -14,6 +18,7 @@ defineProps<{
         v-for="product in products"
         :key="product.id"
         :product="product"
+        @open-product="emit('open-product', $event)"
       />
     </div>
   </section>

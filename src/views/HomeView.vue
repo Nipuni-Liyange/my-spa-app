@@ -5,6 +5,7 @@ import AppFooter from '../components/layout/AppFooter.vue'
 import HeroBanner from '../components/home/HeroBanner.vue'
 import CategoryList from '../components/home/CategoryList.vue'
 import ProductGrid from '../components/product/ProductGrid.vue'
+import ProductModal from '../components/product/ProductModal.vue'
 import { fetchProducts } from '../services/productService'
 import type { Product } from '../types/product'
 
@@ -18,6 +19,9 @@ const showAll = ref(false)
 
 const menuOpen = ref(false)
 const darkMode = ref(localStorage.getItem('darkMode') === 'true')
+
+const selectedProduct = ref<Product | null>(null)
+const showProductModal = ref(false)
 
 const fashionCategories = [
   'mens-shirts',
@@ -33,15 +37,8 @@ const fashionCategories = [
 ]
 
 const categoryMap: Record<string, string[]> = {
-  Clothes: [
-    'mens-shirts',
-    'womens-dresses',
-    'tops',
-  ],
-  Footwear: [
-    'mens-shoes',
-    'womens-shoes',
-  ],
+  Clothes: ['mens-shirts', 'womens-dresses', 'tops'],
+  Footwear: ['mens-shoes', 'womens-shoes'],
   Others: [
     'beauty',
     'womens-watches',
@@ -103,11 +100,18 @@ const categoryImages = computed(() => {
 function selectCategory(category: string) {
   selectedCategory.value = category
   showAll.value = false
+  menuOpen.value = false
 }
 
 function exploreCollection() {
   showAll.value = true
   searchTerm.value = ''
+}
+
+function showAllProducts() {
+  showAll.value = true
+  searchTerm.value = ''
+  menuOpen.value = false
 }
 
 function toggleDark() {
@@ -116,6 +120,16 @@ function toggleDark() {
 
 function toggleMenu() {
   menuOpen.value = !menuOpen.value
+}
+
+function openProduct(product: Product) {
+  selectedProduct.value = product
+  showProductModal.value = true
+}
+
+function closeProductModal() {
+  showProductModal.value = false
+  selectedProduct.value = null
 }
 
 onMounted(async () => {
@@ -142,6 +156,8 @@ onMounted(async () => {
       @update:search-term="searchTerm = $event"
       @toggle-dark="toggleDark"
       @toggle-menu="toggleMenu"
+      @select-menu-category="selectCategory"
+      @show-all-products="showAllProducts"
     />
 
     <HeroBanner @explore="exploreCollection" />
@@ -171,6 +187,7 @@ onMounted(async () => {
     <ProductGrid
       v-if="!loading && !error && displayedProducts.length > 0"
       :products="displayedProducts"
+      @open-product="openProduct"
     />
 
     <p
@@ -179,6 +196,12 @@ onMounted(async () => {
     >
       Product not available.
     </p>
+
+    <ProductModal
+      :show="showProductModal"
+      :product="selectedProduct"
+      @close="closeProductModal"
+    />
 
     <AppFooter />
   </div>
