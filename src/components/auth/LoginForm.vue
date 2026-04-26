@@ -46,7 +46,7 @@ async function handleLogin() {
           <input
             v-model="username"
             type="text"
-            placeholder="Enter DummyJSON username"
+            placeholder="Enter username"
             class="w-full rounded-2xl border border-stone-300 bg-[#faf7f2] px-4 py-3 text-sm text-stone-700 outline-none transition focus:border-[#b79a72] focus:bg-white dark:border-stone-600 dark:bg-[#2d2824] dark:text-white dark:focus:border-[#d8b892]"
           />
         </div>
