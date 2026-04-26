@@ -5,6 +5,7 @@ import { useCartStore } from '../../stores/cart'
 const cartStore = useCartStore()
 
 const showCheckoutForm = ref(false)
+const showSuccessBox = ref(false)
 const successMessage = ref('')
 
 const fullName = ref('')
@@ -19,6 +20,7 @@ const cvv = ref('')
 
 function openCheckoutForm() {
   showCheckoutForm.value = true
+  showSuccessBox.value = false
   successMessage.value = ''
 }
 
@@ -32,10 +34,13 @@ function confirmPayment() {
       ? 'Payment successful!'
       : 'Order placed successfully with Cash on Delivery!'
 
+  showSuccessBox.value = true
+
   setTimeout(() => {
+    showSuccessBox.value = false
     successMessage.value = ''
     showCheckoutForm.value = false
-  }, 2000)
+  }, 2200)
 }
 </script>
 
@@ -73,15 +78,16 @@ function confirmPayment() {
       </button>
     </div>
 
+    <!-- Checkout modal -->
     <div
       v-if="showCheckoutForm"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+      class="fixed inset-0 z-50 bg-black/40 px-2 py-2 sm:flex sm:items-center sm:justify-center sm:p-4"
     >
       <div
-        class="w-full max-w-3xl rounded-2xl bg-white p-5 shadow-xl dark:bg-[#241f1b]"
+        class="relative mx-auto h-[96vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-4 shadow-xl sm:h-auto sm:max-h-[90vh] sm:p-5 dark:bg-[#241f1b]"
       >
         <div class="mb-4 flex items-center justify-between">
-          <h3 class="text-2xl font-semibold text-stone-800 dark:text-white">
+          <h3 class="text-xl font-semibold text-stone-800 sm:text-2xl dark:text-white">
             Payment Details
           </h3>
 
@@ -93,15 +99,32 @@ function confirmPayment() {
           </button>
         </div>
 
-        <p
-          v-if="successMessage"
-          class="mb-3 rounded-xl bg-green-100 px-4 py-2 text-sm font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300"
+        <!-- Small success popup -->
+        <div
+          v-if="showSuccessBox"
+          class="fixed inset-0 z-[60] flex items-center justify-center bg-black/25 px-4"
         >
-          {{ successMessage }}
-        </p>
+          <div
+            class="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl dark:bg-[#241f1b]"
+          >
+            <div
+              class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-2xl text-green-600 dark:bg-green-900/30 dark:text-green-300"
+            >
+              ✓
+            </div>
+
+            <h4 class="text-lg font-semibold text-stone-800 dark:text-white">
+              Success
+            </h4>
+
+            <p class="mt-2 text-sm text-stone-600 dark:text-stone-300">
+              {{ successMessage }}
+            </p>
+          </div>
+        </div>
 
         <!-- Delivery Information -->
-        <div class="rounded-2xl border border-stone-300 p-4 dark:border-stone-700">
+        <div class="rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-stone-700">
           <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
             Delivery Information
           </h4>
@@ -158,7 +181,7 @@ function confirmPayment() {
         </div>
 
         <!-- Payment Method -->
-        <div class="mt-4 rounded-2xl border border-stone-300 p-4 dark:border-stone-700">
+        <div class="mt-4 rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-stone-700">
           <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
             Payment Method
           </h4>
@@ -167,27 +190,27 @@ function confirmPayment() {
             <button
               type="button"
               @click="paymentMethod = 'card'"
-              class="rounded-xl border px-4 py-3 text-left transition"
+              class="rounded-xl border px-4 py-3 text-left text-sm transition"
               :class="
                 paymentMethod === 'card'
                   ? 'border-[#2f6f4f] bg-[#edf7f1] dark:bg-[#1f3328]'
                   : 'border-stone-300 bg-white dark:border-stone-600 dark:bg-[#2d2824]'
               "
             >
-              <p class="text-sm font-semibold text-stone-800 dark:text-white">Credit/Debit Card</p>
+              <p class="font-semibold text-stone-800 dark:text-white">Credit/Debit Card</p>
             </button>
 
             <button
               type="button"
               @click="paymentMethod = 'cod'"
-              class="rounded-xl border px-4 py-3 text-left transition"
+              class="rounded-xl border px-4 py-3 text-left text-sm transition"
               :class="
                 paymentMethod === 'cod'
                   ? 'border-[#2f6f4f] bg-[#edf7f1] dark:bg-[#1f3328]'
                   : 'border-stone-300 bg-white dark:border-stone-600 dark:bg-[#2d2824]'
               "
             >
-              <p class="text-sm font-semibold text-stone-800 dark:text-white">Cash on Delivery</p>
+              <p class="font-semibold text-stone-800 dark:text-white">Cash on Delivery</p>
             </button>
           </div>
 
@@ -231,14 +254,14 @@ function confirmPayment() {
         </div>
 
         <!-- Bottom Bar -->
-        <div class="mt-4 flex items-center justify-between rounded-2xl border border-stone-300 p-4 dark:border-stone-700">
+        <div class="mt-4 flex flex-col gap-3 rounded-2xl border border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-stone-700">
           <p class="text-xl font-semibold text-stone-800 dark:text-white">
             Total: ${{ cartStore.total.toFixed(2) }}
           </p>
 
           <button
             @click="confirmPayment"
-            class="rounded-full bg-[#b79a72] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#a98b64]"
+            class="w-full rounded-full bg-[#b79a72] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a98b64] sm:w-auto"
           >
             Confirm Payment
           </button>

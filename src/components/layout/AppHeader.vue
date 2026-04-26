@@ -31,7 +31,7 @@ function handleAuthClick() {
   } else {
     router.push('/login')
   }
-  emit('toggle-menu')
+  if (props.menuOpen) emit('toggle-menu')
 }
 
 function handleMenuCategory(category: string) {
@@ -44,24 +44,22 @@ function handleShowAll() {
 
 function goToCart() {
   router.push('/cart')
-  emit('toggle-menu')
+  if (props.menuOpen) emit('toggle-menu')
 }
 
 function goToHome() {
   router.push('/')
-  emit('toggle-menu')
+  if (props.menuOpen) emit('toggle-menu')
 }
 </script>
 
 <template>
-  <header
-    class="border-b border-stone-200 bg-[#ece8d8] dark:border-stone-700 dark:bg-[#1f1b18]"
-  >
-    <div class="mx-auto max-w-7xl px-6 py-4">
-      <div class="flex items-center justify-between gap-4">
-        <div class="relative flex items-center gap-4">
+  <header class="border-b border-stone-200 bg-[#ece8d8] dark:border-stone-700 dark:bg-[#1f1b18]">
+    <div class="mx-auto max-w-7xl px-3 py-3 sm:px-6">
+      <div class="flex items-center justify-between gap-2">
+        <div class="relative flex min-w-0 items-center gap-2">
           <button
-            class="text-2xl text-stone-600 transition hover:text-[#9b5d52] dark:text-stone-200"
+            class="shrink-0 text-2xl text-stone-600 transition hover:text-[#9b5d52] dark:text-stone-200"
             @click="emit('toggle-menu')"
             aria-label="Open menu"
           >
@@ -73,13 +71,13 @@ function goToHome() {
             :value="searchTerm || ''"
             @input="emit('update:searchTerm', ($event.target as HTMLInputElement).value)"
             type="text"
-            placeholder="Search products..."
-            class="w-64 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm text-stone-700 outline-none transition focus:border-[#9b7a5a] dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+            placeholder="Search..."
+            class="w-28 rounded-full border border-stone-300 bg-white px-3 py-2 text-xs text-stone-700 outline-none transition focus:border-[#9b7a5a] sm:w-44 sm:px-4 sm:text-sm md:w-64 dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
           />
 
           <div
             v-if="menuOpen"
-            class="absolute left-0 top-16 z-50 w-72 rounded-2xl border border-stone-200 bg-white p-4 shadow-xl dark:border-stone-700 dark:bg-[#2d2824]"
+            class="absolute left-0 top-14 z-50 w-72 rounded-2xl border border-stone-200 bg-white p-4 shadow-xl dark:border-stone-700 dark:bg-[#2d2824]"
           >
             <div class="space-y-4">
               <div>
@@ -88,24 +86,13 @@ function goToHome() {
                 </p>
 
                 <div class="space-y-2">
-                  <button
-                    @click="handleMenuCategory('Clothes')"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
-                  >
+                  <button @click="handleMenuCategory('Clothes')" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
                     Clothes
                   </button>
-
-                  <button
-                    @click="handleMenuCategory('Footwear')"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
-                  >
+                  <button @click="handleMenuCategory('Footwear')" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
                     Footwear
                   </button>
-
-                  <button
-                    @click="handleMenuCategory('Others')"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
-                  >
+                  <button @click="handleMenuCategory('Others')" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
                     Others
                   </button>
                 </div>
@@ -117,31 +104,16 @@ function goToHome() {
                 </p>
 
                 <div class="space-y-2">
-                  <button
-                    @click="handleShowAll"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
-                  >
+                  <button @click="handleShowAll" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
                     Explore Collection
                   </button>
-
-                  <button
-                    @click="goToHome"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
-                  >
+                  <button @click="goToHome" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
                     Home
                   </button>
-
-                  <button
-                    @click="goToCart"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
-                  >
+                  <button @click="goToCart" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
                     Cart
                   </button>
-
-                  <button
-                    @click="handleAuthClick"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
-                  >
+                  <button @click="handleAuthClick" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
                     {{ authLabel }}
                   </button>
                 </div>
@@ -159,45 +131,62 @@ function goToHome() {
             </div>
           </div>
         </div>
-        
-        <div class="text-center leading-tight">
-          <h1 class="text-3xl font-bold tracking-[0.08em] text-[#7b4f4a] dark:text-[#e0c9b2] md:text-4xl">
-    MiraFashion
+
+        <div class="min-w-0 flex-1 text-center px-1">
+          <h1 class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] sm:text-2xl md:text-4xl dark:text-[#e0c9b2]">
+            MiraFashion
           </h1>
-          <p class="mt-1 text-[10px] uppercase tracking-[0.35em] text-[#b79a72] dark:text-[#d8b892] md:text-xs">
-    Timeless Style · Modern You
+          <p class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] sm:block md:text-xs dark:text-[#d8b892]">
+            Timeless Style · Modern You
           </p>
         </div>
 
-        <nav class="flex items-center gap-6 text-sm text-stone-700 dark:text-stone-200">
-          <a
-            href="/"
-            :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
-          >
-            HOME
-          </a>
+        <div class="flex shrink-0 items-center gap-2 sm:gap-3">
+          <div class="flex items-center gap-2 md:hidden">
+            <a
+              href="/cart"
+              class="text-lg sm:text-xl"
+              :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+            >
+              🛒
+            </a>
 
-          <a
-            href="/cart"
-            class="flex items-center gap-2"
-            :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
-          >
-            <span>🛒</span>
-            <span>CART</span>
-          </a>
+            <button
+              @click="emit('toggle-dark')"
+              class="text-lg text-stone-700 transition hover:text-[#9b5d52] sm:text-xl dark:text-stone-200"
+              :title="darkMode ? 'Light Mode' : 'Dark Mode'"
+            >
+              {{ darkMode ? '☀' : '☾' }}
+            </button>
+          </div>
 
-          <button @click="handleAuthClick">
-            {{ authLabel }}
-          </button>
+          <nav class="hidden items-center gap-5 text-sm md:flex text-stone-700 dark:text-stone-200">
+            <a href="/" :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'">
+              HOME
+            </a>
 
-          <button
-            @click="emit('toggle-dark')"
-            class="text-2xl text-stone-700 transition hover:text-[#9b5d52] dark:text-stone-200"
-            :title="darkMode ? 'Light Mode' : 'Dark Mode'"
-          >
-            {{ darkMode ? '☀' : '☾' }}
-          </button>
-        </nav>
+            <a
+              href="/cart"
+              class="flex items-center gap-2"
+              :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+            >
+              <span>🛒</span>
+              <span>CART</span>
+            </a>
+
+            <button @click="handleAuthClick">
+              {{ authLabel }}
+            </button>
+
+            <button
+              @click="emit('toggle-dark')"
+              class="text-2xl text-stone-700 transition hover:text-[#9b5d52] dark:text-stone-200"
+              :title="darkMode ? 'Light Mode' : 'Dark Mode'"
+            >
+              {{ darkMode ? '☀' : '☾' }}
+            </button>
+          </nav>
+        </div>
       </div>
     </div>
   </header>
