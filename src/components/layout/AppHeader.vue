@@ -159,10 +159,15 @@ function goToHome() {
             </div>
           </div>
         </div>
-
-        <h1 class="text-2xl font-semibold tracking-wide text-[#7b4f4a] dark:text-[#e0c9b2]">
-          MiraFashion
-        </h1>
+        
+        <div class="text-center leading-tight">
+          <h1 class="text-3xl font-bold tracking-[0.08em] text-[#7b4f4a] dark:text-[#e0c9b2] md:text-4xl">
+    MiraFashion
+          </h1>
+          <p class="mt-1 text-[10px] uppercase tracking-[0.35em] text-[#b79a72] dark:text-[#d8b892] md:text-xs">
+    Timeless Style · Modern You
+          </p>
+        </div>
 
         <nav class="flex items-center gap-6 text-sm text-stone-700 dark:text-stone-200">
           <a
