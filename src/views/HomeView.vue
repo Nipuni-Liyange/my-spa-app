@@ -23,6 +23,9 @@ const darkMode = ref(localStorage.getItem('darkMode') === 'true')
 const selectedProduct = ref<Product | null>(null)
 const showProductModal = ref(false)
 
+/* important */
+const compactView = ref(false)
+
 const fashionCategories = [
   'mens-shirts',
   'womens-dresses',
@@ -83,7 +86,10 @@ const searchedProducts = computed(() => {
 })
 
 const displayedProducts = computed(() => {
-  return showAll.value ? searchedProducts.value : searchedProducts.value.slice(0, 8)
+  if (searchTerm.value.trim()) return searchedProducts.value
+  if (showAll.value) return searchedProducts.value
+  if (selectedCategory.value) return searchedProducts.value
+  return searchedProducts.value.slice(0, 8)
 })
 
 const categoryImages = computed(() => {
@@ -105,23 +111,62 @@ const categoryImages = computed(() => {
   }
 })
 
+const showHomeSections = computed(() => {
+  return !compactView.value
+})
+
+const sectionTitle = computed(() => {
+  if (searchTerm.value.trim()) return 'Search Results'
+  if (showAll.value) return 'Explore Collection'
+  if (selectedCategory.value) return selectedCategory.value
+  return 'Featured Products'
+})
+
+/* circle click */
 function selectCategory(category: string) {
   selectedCategory.value = category
   showAll.value = false
+  compactView.value = false
   menuOpen.value = false
 }
 
+/* hero button click */
 function exploreCollection() {
   showAll.value = true
   selectedCategory.value = ''
   searchTerm.value = ''
+  compactView.value = false
 }
 
+/* white menu box click */
 function showAllProducts() {
   showAll.value = true
   selectedCategory.value = ''
   searchTerm.value = ''
+  compactView.value = true
   menuOpen.value = false
+}
+
+/* white menu category click */
+function selectMenuCategory(category: string) {
+  selectedCategory.value = category
+  showAll.value = false
+  searchTerm.value = ''
+  compactView.value = true
+  menuOpen.value = false
+}
+
+/* search */
+function updateSearch(value: string) {
+  searchTerm.value = value
+
+  if (value.trim()) {
+    selectedCategory.value = ''
+    showAll.value = false
+    compactView.value = true
+  } else {
+    compactView.value = false
+  }
 }
 
 function toggleDark() {
@@ -163,29 +208,35 @@ onMounted(async () => {
       :menu-open="menuOpen"
       :show-search="true"
       current-page="home"
-      @update:search-term="searchTerm = $event"
+      @update:search-term="updateSearch"
       @toggle-dark="toggleDark"
       @toggle-menu="toggleMenu"
-      @select-menu-category="selectCategory"
+      @select-menu-category="selectMenuCategory"
       @show-all-products="showAllProducts"
     />
 
-    <HeroBanner @explore="exploreCollection" />
+    <template v-if="showHomeSections">
+      <HeroBanner @explore="exploreCollection" />
 
-    <CategoryList
-      :selected-category="selectedCategory"
-      :category-images="categoryImages"
-      @select-category="selectCategory"
-    />
+      <CategoryList
+        :selected-category="selectedCategory"
+        :category-images="categoryImages"
+        @select-category="selectCategory"
+      />
+    </template>
 
-    <div class="mx-auto mt-10 max-w-7xl px-6">
+    <div class="mx-auto mt-8 max-w-7xl px-6">
       <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p class="text-sm uppercase tracking-[0.3em] text-[#9b5d52]">
-            Featured Edit
+          <p
+            v-if="compactView"
+            class="text-sm uppercase tracking-[0.3em] text-[#9b5d52]"
+          >
+            Product View
           </p>
+
           <h2 class="mt-2 text-3xl font-semibold text-stone-800 dark:text-white">
-            {{ showAll ? 'Explore Collection' : selectedCategory }}
+            {{ sectionTitle }}
           </h2>
         </div>
 
