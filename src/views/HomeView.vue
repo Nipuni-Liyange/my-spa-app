@@ -67,9 +67,16 @@ const fashionProducts = computed(() => {
 })
 
 const baseProducts = computed(() => {
+  if (searchTerm.value.trim()) return fashionProducts.value
+
   if (showAll.value) return fashionProducts.value
 
   const mappedCategories = categoryMap[selectedCategory.value] || []
+
+  if (!selectedCategory.value) {
+    return fashionProducts.value
+  }
+
   return products.value.filter((product) =>
     mappedCategories.includes(product.category)
   )
@@ -81,7 +88,7 @@ const searchedProducts = computed(() => {
   if (!q) return baseProducts.value
 
   return baseProducts.value.filter((product) =>
-    product.title.toLowerCase().includes(q)
+    product.title.toLowerCase().startsWith(q)
   )
 })
 
