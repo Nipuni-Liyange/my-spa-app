@@ -6,8 +6,8 @@ import { useAuthStore } from '../../stores/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-const username = ref('')
-const password = ref('')
+const username = ref('emilys')
+const password = ref('emilyspass')
 
 async function handleLogin() {
   const success = await authStore.login({
@@ -63,12 +63,10 @@ async function handleLogin() {
           />
         </div>
 
-        <div class="rounded-2xl bg-[#f8f1e6] px-4 py-3 text-sm text-stone-600 dark:bg-[#2d2824] dark:text-stone-300">
-          <span class="font-semibold text-[#9b5d52] dark:text-[#d8b892]">Demo Login:</span>
-          emilys / emilyspass
-        </div>
-
-        <p v-if="authStore.error" class="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-300">
+        <p
+          v-if="authStore.error"
+          class="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-900/20 dark:text-red-300"
+        >
           {{ authStore.error }}
         </p>
 

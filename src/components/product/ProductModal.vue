@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCartStore } from '../../stores/cart'
 import type { Product } from '../../types/product'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
   product: Product | null
@@ -15,6 +15,13 @@ const emit = defineEmits<{
 const cartStore = useCartStore()
 const showSuccessToast = ref(false)
 const quantity = ref(1)
+const selectedSize = ref('M')
+
+const clothingCategories = ['mens-shirts', 'womens-dresses', 'tops']
+
+const isClothingProduct = computed(() => {
+  return props.product ? clothingCategories.includes(props.product.category) : false
+})
 
 watch(
   () => props.show,
@@ -22,6 +29,7 @@ watch(
     if (value) {
       quantity.value = 1
       showSuccessToast.value = false
+      selectedSize.value = 'M'
     }
   }
 )
@@ -30,6 +38,7 @@ function closeModal() {
   emit('close')
   showSuccessToast.value = false
   quantity.value = 1
+  selectedSize.value = 'M'
 }
 
 function increaseQty() {
@@ -70,7 +79,6 @@ function handleAddToCart() {
         ✕
       </button>
 
-      <!-- Success message box -->
       <div
         v-if="showSuccessToast"
         class="absolute left-1/2 top-4 z-10 w-[88%] max-w-sm -translate-x-1/2 rounded-2xl border border-green-200 bg-white px-4 py-3 shadow-lg dark:border-green-800 dark:bg-[#2d2824]"
@@ -118,6 +126,56 @@ function handleAddToCart() {
             ${{ product.price.toFixed(2) }}
           </p>
 
+          <div
+            v-if="isClothingProduct"
+            class="mt-4"
+          >
+            <p class="mb-2 text-sm font-medium text-stone-700 dark:text-stone-200">
+              Select Size
+            </p>
+
+            <div class="flex items-center gap-3">
+              <button
+                type="button"
+                @click="selectedSize = 'S'"
+                class="flex h-10 w-10 items-center justify-center rounded-full border text-sm font-semibold transition"
+                :class="
+                  selectedSize === 'S'
+                    ? 'border-[#9b5d52] bg-[#b79a72] text-white'
+                    : 'border-stone-300 text-stone-700 dark:border-stone-600 dark:text-white'
+                "
+              >
+                S
+              </button>
+
+              <button
+                type="button"
+                @click="selectedSize = 'M'"
+                class="flex h-10 w-10 items-center justify-center rounded-full border text-sm font-semibold transition"
+                :class="
+                  selectedSize === 'M'
+                    ? 'border-[#9b5d52] bg-[#b79a72] text-white'
+                    : 'border-stone-300 text-stone-700 dark:border-stone-600 dark:text-white'
+                "
+              >
+                M
+              </button>
+
+              <button
+                type="button"
+                @click="selectedSize = 'L'"
+                class="flex h-10 w-10 items-center justify-center rounded-full border text-sm font-semibold transition"
+                :class="
+                  selectedSize === 'L'
+                    ? 'border-[#9b5d52] bg-[#b79a72] text-white'
+                    : 'border-stone-300 text-stone-700 dark:border-stone-600 dark:text-white'
+                "
+              >
+                L
+              </button>
+            </div>
+          </div>
+
           <div class="mt-4">
             <p class="mb-2 text-sm font-medium text-stone-700 dark:text-stone-200">
               Select Quantity
@@ -149,6 +207,7 @@ function handleAddToCart() {
           <div class="mt-4 space-y-1 text-sm text-stone-500 dark:text-stone-300">
             <p>Stock: {{ product.stock }}</p>
             <p>Rating: {{ product.rating }}</p>
+            <p v-if="isClothingProduct">Selected Size: {{ selectedSize }}</p>
           </div>
 
           <button
