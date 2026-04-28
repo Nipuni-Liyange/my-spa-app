@@ -8,15 +8,15 @@ const showCheckoutForm = ref(false)
 const showSuccessBox = ref(false)
 const successMessage = ref('')
 
-const fullName = ref('')
-const phoneNumber = ref('')
-const email = ref('')
-const address = ref('')
+const fullName = ref('Nipuni Dinushika')
+const phoneNumber = ref('+94 77 123 4567')
+const email = ref('nipuni.customer@gmail.com')
+const address = ref('Colombo, Sri Lanka')
 
 const paymentMethod = ref<'card' | 'cod'>('card')
-const cardNumber = ref('')
-const expiryDate = ref('')
-const cvv = ref('')
+const cardNumber = ref('1111 2222 3333 4444')
+const expiryDate = ref('12/28')
+const cvv = ref('123')
 
 function openCheckoutForm() {
   showCheckoutForm.value = true
@@ -78,7 +78,6 @@ function confirmPayment() {
       </button>
     </div>
 
-    <!-- Checkout modal -->
     <div
       v-if="showCheckoutForm"
       class="fixed inset-0 z-50 bg-black/40 px-2 py-2 sm:flex sm:items-center sm:justify-center sm:p-4"
@@ -99,7 +98,6 @@ function confirmPayment() {
           </button>
         </div>
 
-        <!-- Small success popup -->
         <div
           v-if="showSuccessBox"
           class="fixed inset-0 z-[60] flex items-center justify-center bg-black/25 px-4"
@@ -123,7 +121,6 @@ function confirmPayment() {
           </div>
         </div>
 
-        <!-- Delivery Information -->
         <div class="rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-stone-700">
           <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
             Delivery Information
@@ -180,7 +177,6 @@ function confirmPayment() {
           </div>
         </div>
 
-        <!-- Payment Method -->
         <div class="mt-4 rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-stone-700">
           <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
             Payment Method
@@ -253,7 +249,6 @@ function confirmPayment() {
           </div>
         </div>
 
-        <!-- Bottom Bar -->
         <div class="mt-4 flex flex-col gap-3 rounded-2xl border border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-stone-700">
           <p class="text-xl font-semibold text-stone-800 dark:text-white">
             Total: ${{ cartStore.total.toFixed(2) }}
@@ -270,5 +265,3 @@ function confirmPayment() {
     </div>
   </div>
 </template>
-
-
