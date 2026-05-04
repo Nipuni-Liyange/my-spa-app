@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import image1 from "../../assets/images/image1.png";
+import image2 from "../../assets/images/image2.png";
+import image3 from "../../assets/images/image3.png";
+
 const emit = defineEmits<{
   (e: 'explore'): void
 }>()
@@ -8,8 +12,9 @@ const emit = defineEmits<{
   <section class="mx-auto mt-6 max-w-7xl px-3 sm:mt-8 sm:px-6">
     <div class="grid min-h-[300px] overflow-hidden rounded-[24px] shadow-lg sm:min-h-[380px] sm:rounded-[32px] md:grid-cols-3">
       <div
-        class="relative flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80')] bg-cover bg-center md:col-span-1"
-      >
+  class="relative flex items-center justify-center bg-cover bg-center md:col-span-1"
+  :style="{ backgroundImage: `url(${image1})` }"
+>
         <div class="absolute inset-0 bg-black/20"></div>
 
         <div class="relative z-10 mx-4 my-6 rounded-2xl bg-[#f5efde]/90 p-5 text-center shadow-xl backdrop-blur-sm sm:mx-6 sm:p-8">
@@ -38,14 +43,16 @@ const emit = defineEmits<{
       </div>
 
       <div
-        class="relative hidden bg-[url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80')] bg-cover bg-center md:block"
-      >
+  class="relative hidden bg-cover bg-center md:block"
+  :style="{ backgroundImage: `url(${image2})` }"
+>
         <div class="absolute inset-0 bg-black/10"></div>
       </div>
 
       <div
-        class="relative hidden bg-[url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80')] bg-cover bg-center md:block"
-      >
+  class="relative hidden bg-cover bg-center md:block"
+  :style="{ backgroundImage: `url(${image3})` }"
+>
         <div class="absolute inset-0 bg-black/10"></div>
       </div>
     </div>
