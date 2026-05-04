@@ -22,11 +22,18 @@ const emit = defineEmits<{
             MiraFashion
           </p>
 
-          <h2 class="text-3xl font-semibold leading-tight text-[#5f4a3d] sm:text-4xl md:text-5xl">
-            Where Miracle Meets
-            <br />
-            the Magic of Fashion
-          </h2>
+          <h2
+  class="text-[28px] leading-[1.03] tracking-wide text-[#5f463d] drop-shadow-sm sm:text-[34px] md:text-[38px]"
+  style="font-family: 'Playfair Display', serif; font-weight: 500;"
+>
+  Where Miracle
+  <br />
+  Meets the Magic
+  <br />
+  <span class="italic text-[#a16458]">
+    of Fashion
+  </span>
+</h2>
 
           <p class="mt-3 text-sm leading-6 text-stone-600 sm:mt-4 sm:text-base">
             Discover elegant styles, timeless accessories, and beauty essentials
