@@ -13,6 +13,7 @@ const emit = defineEmits<{
 }>()
 
 const cartStore = useCartStore()
+
 const showSuccessToast = ref(false)
 const quantity = ref(1)
 const selectedSize = ref('M')
@@ -28,17 +29,17 @@ watch(
   (value) => {
     if (value) {
       quantity.value = 1
-      showSuccessToast.value = false
       selectedSize.value = 'M'
+      showSuccessToast.value = false
     }
   }
 )
 
 function closeModal() {
   emit('close')
-  showSuccessToast.value = false
   quantity.value = 1
   selectedSize.value = 'M'
+  showSuccessToast.value = false
 }
 
 function increaseQty() {
@@ -46,7 +47,9 @@ function increaseQty() {
 }
 
 function decreaseQty() {
-  if (quantity.value > 1) quantity.value--
+  if (quantity.value > 1) {
+    quantity.value--
+  }
 }
 
 function handleAddToCart() {
@@ -67,21 +70,23 @@ function handleAddToCart() {
 <template>
   <div
     v-if="show && product"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/35 px-3 py-4 backdrop-blur-sm"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-3 py-4 backdrop-blur-sm"
   >
     <div
-      class="relative w-full max-w-[430px] rounded-2xl bg-white p-4 shadow-2xl sm:max-w-2xl sm:p-5 md:max-w-4xl dark:bg-[#241f1b]"
+      class="relative max-h-[92vh] w-full max-w-[390px] overflow-y-auto rounded-2xl bg-white p-4 shadow-2xl sm:max-w-2xl sm:p-5 md:max-w-4xl dark:bg-[#241f1b]"
     >
+      <!-- Close button -->
       <button
         @click="closeModal"
-        class="absolute right-3 top-3 text-lg text-stone-500 hover:text-stone-700 dark:text-stone-300"
+        class="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-lg text-stone-500 shadow hover:text-stone-700 dark:bg-[#2d2824] dark:text-stone-300"
       >
         ✕
       </button>
 
+      <!-- Success message box -->
       <div
         v-if="showSuccessToast"
-        class="absolute left-1/2 top-4 z-10 w-[88%] max-w-sm -translate-x-1/2 rounded-2xl border border-green-200 bg-white px-4 py-3 shadow-lg dark:border-green-800 dark:bg-[#2d2824]"
+        class="fixed left-1/2 top-6 z-[60] w-[86%] max-w-sm -translate-x-1/2 rounded-2xl border border-green-200 bg-white px-4 py-3 shadow-xl dark:border-green-800 dark:bg-[#2d2824]"
       >
         <div class="flex items-center gap-3">
           <div
@@ -89,6 +94,7 @@ function handleAddToCart() {
           >
             ✓
           </div>
+
           <div>
             <p class="text-sm font-semibold text-stone-800 dark:text-white">
               Added to cart
@@ -101,24 +107,32 @@ function handleAddToCart() {
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
+        <!-- Product image -->
         <div class="rounded-2xl bg-stone-100 p-3 dark:bg-[#2d2824]">
           <img
             :src="product.thumbnail"
             :alt="product.title"
-            class="h-40 w-full rounded-xl object-cover sm:h-52 md:h-[320px]"
+            class="h-36 w-full rounded-xl object-contain sm:h-56 md:h-[320px]"
           />
         </div>
 
-        <div class="flex flex-col justify-center">
-          <p class="text-[11px] uppercase tracking-[0.18em] text-stone-500 sm:text-xs dark:text-stone-300">
+        <!-- Product details -->
+        <div class="flex flex-col">
+          <p
+            class="text-[10px] uppercase tracking-[0.2em] text-stone-500 sm:text-xs dark:text-stone-300"
+          >
             {{ product.category }}
           </p>
 
-          <h2 class="mt-2 text-2xl font-semibold leading-tight text-stone-800 sm:text-3xl dark:text-white">
+          <h2
+            class="mt-2 text-xl font-semibold leading-tight text-stone-800 sm:text-2xl md:text-3xl dark:text-white"
+          >
             {{ product.title }}
           </h2>
 
-          <p class="mt-3 text-sm leading-7 text-stone-600 sm:text-[15px] dark:text-stone-300">
+          <p
+            class="mt-3 text-sm leading-6 text-stone-600 sm:leading-7 dark:text-stone-300"
+          >
             {{ product.description }}
           </p>
 
@@ -126,10 +140,8 @@ function handleAddToCart() {
             ${{ product.price.toFixed(2) }}
           </p>
 
-          <div
-            v-if="isClothingProduct"
-            class="mt-4"
-          >
+          <!-- Size selection only for clothes -->
+          <div v-if="isClothingProduct" class="mt-4">
             <p class="mb-2 text-sm font-medium text-stone-700 dark:text-stone-200">
               Select Size
             </p>
@@ -176,6 +188,7 @@ function handleAddToCart() {
             </div>
           </div>
 
+          <!-- Quantity -->
           <div class="mt-4">
             <p class="mb-2 text-sm font-medium text-stone-700 dark:text-stone-200">
               Select Quantity
@@ -204,6 +217,7 @@ function handleAddToCart() {
             </div>
           </div>
 
+          <!-- Extra details -->
           <div class="mt-4 space-y-1 text-sm text-stone-500 dark:text-stone-300">
             <p>Stock: {{ product.stock }}</p>
             <p>Rating: {{ product.rating }}</p>
@@ -212,7 +226,7 @@ function handleAddToCart() {
 
           <button
             @click="handleAddToCart"
-            class="mt-5 w-full rounded-full bg-[#b79a72] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#a98b64] md:w-fit md:px-8"
+            class="mt-5 w-full rounded-full bg-[#b79a72] px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#a98b64] md:w-fit md:px-8"
           >
             Add to Cart
           </button>

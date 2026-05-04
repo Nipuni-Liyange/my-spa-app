@@ -1,3 +1,4 @@
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useAuthStore } from '../../stores/auth'
@@ -31,6 +32,7 @@ function handleAuthClick() {
   } else {
     router.push('/login')
   }
+
   if (props.menuOpen) emit('toggle-menu')
 }
 
@@ -56,7 +58,9 @@ function goToHome() {
 <template>
   <header class="border-b border-stone-200 bg-[#ece8d8] dark:border-stone-700 dark:bg-[#1f1b18]">
     <div class="mx-auto max-w-7xl px-3 py-3 sm:px-6">
+      <!-- Main row -->
       <div class="flex items-center justify-between gap-2">
+        <!-- Left side -->
         <div class="relative flex min-w-0 items-center gap-2">
           <button
             class="shrink-0 text-2xl text-stone-600 transition hover:text-[#9b5d52] dark:text-stone-200"
@@ -75,6 +79,7 @@ function goToHome() {
             class="w-28 rounded-full border border-stone-300 bg-white px-3 py-2 text-xs text-stone-700 outline-none transition focus:border-[#9b7a5a] sm:w-44 sm:px-4 sm:text-sm md:w-64 dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
           />
 
+          <!-- Dropdown menu -->
           <div
             v-if="menuOpen"
             class="absolute left-0 top-14 z-50 w-72 rounded-2xl border border-stone-200 bg-white p-4 shadow-xl dark:border-stone-700 dark:bg-[#2d2824]"
@@ -86,13 +91,24 @@ function goToHome() {
                 </p>
 
                 <div class="space-y-2">
-                  <button @click="handleMenuCategory('Clothes')" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
+                  <button
+                    @click="handleMenuCategory('Clothes')"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  >
                     Clothes
                   </button>
-                  <button @click="handleMenuCategory('Footwear')" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
+
+                  <button
+                    @click="handleMenuCategory('Footwear')"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  >
                     Footwear
                   </button>
-                  <button @click="handleMenuCategory('Others')" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
+
+                  <button
+                    @click="handleMenuCategory('Others')"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  >
                     Others
                   </button>
                 </div>
@@ -104,16 +120,31 @@ function goToHome() {
                 </p>
 
                 <div class="space-y-2">
-                  <button @click="handleShowAll" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
+                  <button
+                    @click="handleShowAll"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  >
                     Explore Collection
                   </button>
-                  <button @click="goToHome" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
+
+                  <button
+                    @click="goToHome"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  >
                     Home
                   </button>
-                  <button @click="goToCart" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
+
+                  <button
+                    @click="goToCart"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  >
                     Cart
                   </button>
-                  <button @click="handleAuthClick" class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]">
+
+                  <button
+                    @click="handleAuthClick"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  >
                     {{ authLabel }}
                   </button>
                 </div>
@@ -132,24 +163,28 @@ function goToHome() {
           </div>
         </div>
 
-        <div class="min-w-0 flex-1 text-center px-1">
+        <!-- Brand -->
+        <div class="min-w-0 flex-1 px-1 text-center">
           <h1 class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] sm:text-2xl md:text-4xl dark:text-[#e0c9b2]">
             MiraFashion
           </h1>
+
           <p class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] sm:block md:text-xs dark:text-[#d8b892]">
             Timeless Style · Modern You
           </p>
         </div>
 
+        <!-- Right side -->
         <div class="flex shrink-0 items-center gap-2 sm:gap-3">
+          <!-- Mobile icons -->
           <div class="flex items-center gap-2 md:hidden">
-            <a
-              href="/cart"
+            <button
+              @click="goToCart"
               class="text-lg sm:text-xl"
               :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
             >
               🛒
-            </a>
+            </button>
 
             <button
               @click="emit('toggle-dark')"
@@ -160,19 +195,23 @@ function goToHome() {
             </button>
           </div>
 
-          <nav class="hidden items-center gap-5 text-sm md:flex text-stone-700 dark:text-stone-200">
-            <a href="/" :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'">
+          <!-- Desktop / tablet nav -->
+          <nav class="hidden items-center gap-5 text-sm text-stone-700 md:flex dark:text-stone-200">
+            <button
+              @click="goToHome"
+              :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+            >
               HOME
-            </a>
+            </button>
 
-            <a
-              href="/cart"
+            <button
+              @click="goToCart"
               class="flex items-center gap-2"
               :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
             >
               <span>🛒</span>
               <span>CART</span>
-            </a>
+            </button>
 
             <button @click="handleAuthClick">
               {{ authLabel }}
@@ -188,6 +227,32 @@ function goToHome() {
           </nav>
         </div>
       </div>
+
+      <!-- Mobile navigation row -->
+      <nav
+        class="mt-3 flex items-center justify-center gap-6 border-t border-stone-200 pt-3 text-xs font-semibold tracking-[0.16em] text-stone-700 md:hidden dark:border-stone-700 dark:text-stone-200"
+      >
+        <button
+          @click="goToHome"
+          :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+        >
+          HOME
+        </button>
+
+        <button
+          @click="goToCart"
+          :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+        >
+          CART
+        </button>
+
+        <button
+          @click="handleAuthClick"
+          class="text-stone-700 dark:text-stone-200"
+        >
+          {{ authLabel }}
+        </button>
+      </nav>
     </div>
   </header>
 </template>
