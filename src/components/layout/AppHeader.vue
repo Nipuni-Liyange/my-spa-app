@@ -165,13 +165,23 @@ function goToHome() {
 
         <!-- Brand -->
         <div class="min-w-0 flex-1 px-1 text-center">
-  <h1 class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] sm:text-2xl md:text-4xl dark:text-[#e0c9b2]">
-    MiraFashion
-  </h1>
+  <button
+    @click="goToHome"
+    class="group inline-flex flex-col items-center justify-center"
+    aria-label="Go to home page"
+  >
+    <h1
+      class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] transition group-hover:text-[#9b5d52] sm:text-2xl md:text-4xl dark:text-[#e0c9b2] dark:group-hover:text-[#d8b892]"
+    >
+      MiraFashion
+    </h1>
 
-  <p class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] sm:block md:text-xs dark:text-[#d8b892]">
-    Timeless Style · Modern You
-  </p>
+    <p
+      class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] transition group-hover:text-[#9b5d52] sm:block md:text-xs dark:text-[#d8b892]"
+    >
+      Timeless Style · Modern You
+    </p>
+  </button>
 </div>
 
         <!-- Right side -->
