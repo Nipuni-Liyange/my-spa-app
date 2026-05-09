@@ -56,7 +56,7 @@ function goToHome() {
 </script>
 
 <template>
-  <header class="border-b border-stone-200 bg-[#ece8d8] dark:border-stone-700 dark:bg-[#1f1b18]">
+  <header class="border-b border-stone-200 bg-[#ece8d8] dark:border-[#4a4038] dark:bg-[#2f2924]">
     <div class="mx-auto max-w-7xl px-3 py-3 sm:px-6">
       <!-- Main row -->
       <div class="flex items-center justify-between gap-2">
@@ -82,7 +82,7 @@ function goToHome() {
           <!-- Dropdown menu -->
           <div
             v-if="menuOpen"
-            class="absolute left-0 top-14 z-50 w-72 rounded-2xl border border-stone-200 bg-white p-4 shadow-xl dark:border-stone-700 dark:bg-[#2d2824]"
+            class="absolute left-0 top-14 z-50 w-72 rounded-2xl border border-stone-200 bg-white p-4 shadow-xl dark:border-stone-700 dark:bg-[#3a332d]"
           >
             <div class="space-y-4">
               <div>
@@ -165,14 +165,14 @@ function goToHome() {
 
         <!-- Brand -->
         <div class="min-w-0 flex-1 px-1 text-center">
-          <h1 class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] sm:text-2xl md:text-4xl dark:text-[#e0c9b2]">
-            MiraFashion
-          </h1>
+  <h1 class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] sm:text-2xl md:text-4xl dark:text-[#e0c9b2]">
+    MiraFashion
+  </h1>
 
-          <p class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] sm:block md:text-xs dark:text-[#d8b892]">
-            Timeless Style · Modern You
-          </p>
-        </div>
+  <p class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] sm:block md:text-xs dark:text-[#d8b892]">
+    Timeless Style · Modern You
+  </p>
+</div>
 
         <!-- Right side -->
         <div class="flex shrink-0 items-center gap-2 sm:gap-3">

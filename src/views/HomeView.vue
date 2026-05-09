@@ -208,7 +208,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#f5f1e8] dark:bg-[#181512]">
+  <div class="min-h-screen bg-[#f5f1e8] dark:bg-[#2b2520]">
     <AppHeader
       :search-term="searchTerm"
       :dark-mode="darkMode"

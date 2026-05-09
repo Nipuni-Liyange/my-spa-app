@@ -30,7 +30,7 @@ function toggleMenu() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#f5f1e8] dark:bg-[#181512]">
+  <div class="min-h-screen bg-[#f5f1e8] dark:bg-[#2b2520]">
     <AppHeader
       :dark-mode="darkMode"
       :menu-open="menuOpen"

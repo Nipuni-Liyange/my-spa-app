@@ -13,7 +13,7 @@ function closeContactBox() {
 </script>
 
 <template>
-  <footer class="mt-12 border-t border-stone-200 bg-[#ece8d8] dark:border-stone-700 dark:bg-[#1f1b18]">
+  <footer class="mt-12 border-t border-stone-200 bg-[#ece8d8] dark:border-[#4a4038] dark:bg-[#2f2924]">
     <div
       class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-6 text-center sm:flex-row sm:text-left"
     >
@@ -48,9 +48,9 @@ function closeContactBox() {
           ✕
         </button>
 
-        <h3 class="text-2xl font-semibold text-[#7b4f4a] dark:text-[#e0c9b2]">
-          Contact MiraFashion
-        </h3>
+       <h3 class="text-2xl font-semibold tracking-[0.04em] text-[#7b4f4a] dark:text-[#e0c9b2]">
+  MiraFashion
+</h3> 
 
         <div class="mt-5 space-y-4 text-sm text-stone-700 dark:text-stone-200">
           <div>
