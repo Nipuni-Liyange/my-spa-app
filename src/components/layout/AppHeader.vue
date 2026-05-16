@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import { useRouter } from 'vue-router'
 
@@ -21,6 +21,26 @@ const emit = defineEmits<{
 
 const authStore = useAuthStore()
 const router = useRouter()
+
+const menuWrapper = ref<HTMLElement | null>(null)
+
+function handleOutsideClick(event: MouseEvent) {
+  if (!props.menuOpen) return
+
+  const target = event.target as Node
+
+  if (menuWrapper.value && !menuWrapper.value.contains(target)) {
+    emit('toggle-menu')
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('mousedown', handleOutsideClick)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleOutsideClick)
+})
 
 const authLabel = computed(() => (authStore.isLoggedIn ? 'LOG OUT' : 'LOG IN'))
 
@@ -63,7 +83,7 @@ function goToHome() {
     <div class="mx-auto max-w-7xl px-3 py-3 sm:px-6">
       <div class="flex items-center justify-between gap-2">
         <!-- Left side -->
-        <div class="relative flex min-w-0 items-center gap-2">
+        <div ref="menuWrapper" class="relative flex min-w-0 items-center gap-2">
           <button
             class="shrink-0 text-2xl text-stone-600 transition hover:text-[#9b5d52] dark:text-stone-200"
             @click="emit('toggle-menu')"
