@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useAuthStore } from '../../stores/auth'
@@ -38,10 +37,12 @@ function handleAuthClick() {
 
 function handleMenuCategory(category: string) {
   emit('select-menu-category', category)
+  if (props.menuOpen) emit('toggle-menu')
 }
 
 function handleShowAll() {
   emit('show-all-products')
+  if (props.menuOpen) emit('toggle-menu')
 }
 
 function goToCart() {
@@ -56,9 +57,10 @@ function goToHome() {
 </script>
 
 <template>
-  <header class="border-b border-stone-200 bg-[#ece8d8] dark:border-[#4a4038] dark:bg-[#2f2924]">
+  <header
+    class="border-b border-stone-200 bg-[#ece8d8] dark:border-[#4a4038] dark:bg-[#2f2924]"
+  >
     <div class="mx-auto max-w-7xl px-3 py-3 sm:px-6">
-      <!-- Main row -->
       <div class="flex items-center justify-between gap-2">
         <!-- Left side -->
         <div class="relative flex min-w-0 items-center gap-2">
@@ -76,84 +78,99 @@ function goToHome() {
             @input="emit('update:searchTerm', ($event.target as HTMLInputElement).value)"
             type="text"
             placeholder="Search..."
-            class="w-28 rounded-full border border-stone-300 bg-white px-3 py-2 text-xs text-stone-700 outline-none transition focus:border-[#9b7a5a] sm:w-44 sm:px-4 sm:text-sm md:w-64 dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+            class="w-28 rounded-full border border-stone-300 bg-white px-3 py-2 text-xs text-stone-700 outline-none transition focus:border-[#9b7a5a] sm:w-44 sm:px-4 sm:text-sm md:w-64 dark:border-[#4a4038] dark:bg-[#3a332d] dark:text-white"
           />
 
           <!-- Dropdown menu -->
           <div
             v-if="menuOpen"
-            class="absolute left-0 top-14 z-50 w-72 rounded-2xl border border-stone-200 bg-white p-4 shadow-xl dark:border-stone-700 dark:bg-[#3a332d]"
+            class="absolute left-0 top-14 z-50 w-72 rounded-2xl border border-stone-200 bg-white p-4 shadow-xl dark:border-[#4a4038] dark:bg-[#3a332d]"
           >
             <div class="space-y-4">
-              <div>
-                <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-stone-500">
+              <!-- Shop by Category ONLY on home page -->
+              <div v-if="currentPage === 'home'">
+                <p
+                  class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-stone-400"
+                >
                   Shop by Category
                 </p>
 
                 <div class="space-y-2">
                   <button
                     @click="handleMenuCategory('Clothes')"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                   >
                     Clothes
                   </button>
 
                   <button
                     @click="handleMenuCategory('Footwear')"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                   >
                     Footwear
                   </button>
 
                   <button
                     @click="handleMenuCategory('Others')"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                   >
                     Others
                   </button>
                 </div>
               </div>
 
-              <div class="border-t border-stone-200 pt-4 dark:border-stone-700">
-                <p class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-stone-500">
+              <!-- Quick Actions -->
+              <div
+                :class="
+                  currentPage === 'home'
+                    ? 'border-t border-stone-200 pt-4 dark:border-[#4a4038]'
+                    : ''
+                "
+              >
+                <p
+                  class="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-stone-400"
+                >
                   Quick Actions
                 </p>
 
                 <div class="space-y-2">
+                  <!-- Explore Collection ONLY on home page -->
                   <button
+                    v-if="currentPage === 'home'"
                     @click="handleShowAll"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                   >
                     Explore Collection
                   </button>
 
                   <button
                     @click="goToHome"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                   >
                     Home
                   </button>
 
                   <button
                     @click="goToCart"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                   >
                     Cart
                   </button>
 
                   <button
                     @click="handleAuthClick"
-                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                    class="w-full rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                   >
                     {{ authLabel }}
                   </button>
                 </div>
               </div>
 
-              <div class="border-t border-stone-200 pt-4 dark:border-stone-700">
+              <!-- Theme -->
+              <div class="border-t border-stone-200 pt-4 dark:border-[#4a4038]">
                 <button
                   @click="emit('toggle-dark')"
-                  class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#3a332d]"
+                  class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm text-stone-700 transition hover:bg-[#f5f1e8] dark:text-white dark:hover:bg-[#4a4038]"
                 >
                   <span>Theme</span>
                   <span class="text-lg">{{ darkMode ? '☀' : '☾' }}</span>
@@ -165,24 +182,24 @@ function goToHome() {
 
         <!-- Brand -->
         <div class="min-w-0 flex-1 px-1 text-center">
-  <button
-    @click="goToHome"
-    class="group inline-flex flex-col items-center justify-center"
-    aria-label="Go to home page"
-  >
-    <h1
-      class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] transition group-hover:text-[#9b5d52] sm:text-2xl md:text-4xl dark:text-[#e0c9b2] dark:group-hover:text-[#d8b892]"
-    >
-      MiraFashion
-    </h1>
+          <button
+            @click="goToHome"
+            class="group inline-flex flex-col items-center justify-center"
+            aria-label="Go to home page"
+          >
+            <h1
+              class="truncate text-xl font-bold tracking-[0.04em] text-[#7b4f4a] transition group-hover:text-[#9b5d52] sm:text-2xl md:text-4xl dark:text-[#e0c9b2] dark:group-hover:text-[#d8b892]"
+            >
+              MiraFashion
+            </h1>
 
-    <p
-      class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] transition group-hover:text-[#9b5d52] sm:block md:text-xs dark:text-[#d8b892]"
-    >
-      Timeless Style · Modern You
-    </p>
-  </button>
-</div>
+            <p
+              class="mt-0.5 hidden text-[10px] uppercase tracking-[0.25em] text-[#b79a72] transition group-hover:text-[#9b5d52] sm:block md:text-xs dark:text-[#d8b892]"
+            >
+              Timeless Style · Modern You
+            </p>
+          </button>
+        </div>
 
         <!-- Right side -->
         <div class="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -191,7 +208,11 @@ function goToHome() {
             <button
               @click="goToCart"
               class="text-lg sm:text-xl"
-              :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+              :class="
+                currentPage === 'cart'
+                  ? 'text-[#9b5d52]'
+                  : 'text-stone-700 dark:text-stone-200'
+              "
             >
               🛒
             </button>
@@ -209,7 +230,11 @@ function goToHome() {
           <nav class="hidden items-center gap-5 text-sm text-stone-700 md:flex dark:text-stone-200">
             <button
               @click="goToHome"
-              :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+              :class="
+                currentPage === 'home'
+                  ? 'text-[#9b5d52]'
+                  : 'text-stone-700 dark:text-stone-200'
+              "
             >
               HOME
             </button>
@@ -217,7 +242,11 @@ function goToHome() {
             <button
               @click="goToCart"
               class="flex items-center gap-2"
-              :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+              :class="
+                currentPage === 'cart'
+                  ? 'text-[#9b5d52]'
+                  : 'text-stone-700 dark:text-stone-200'
+              "
             >
               <span>🛒</span>
               <span>CART</span>
@@ -240,18 +269,26 @@ function goToHome() {
 
       <!-- Mobile navigation row -->
       <nav
-        class="mt-3 flex items-center justify-center gap-6 border-t border-stone-200 pt-3 text-xs font-semibold tracking-[0.16em] text-stone-700 md:hidden dark:border-stone-700 dark:text-stone-200"
+        class="mt-3 flex items-center justify-center gap-6 border-t border-stone-200 pt-3 text-xs font-semibold tracking-[0.16em] text-stone-700 md:hidden dark:border-[#4a4038] dark:text-stone-200"
       >
         <button
           @click="goToHome"
-          :class="currentPage === 'home' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+          :class="
+            currentPage === 'home'
+              ? 'text-[#9b5d52]'
+              : 'text-stone-700 dark:text-stone-200'
+          "
         >
           HOME
         </button>
 
         <button
           @click="goToCart"
-          :class="currentPage === 'cart' ? 'text-[#9b5d52]' : 'text-stone-700 dark:text-stone-200'"
+          :class="
+            currentPage === 'cart'
+              ? 'text-[#9b5d52]'
+              : 'text-stone-700 dark:text-stone-200'
+          "
         >
           CART
         </button>
