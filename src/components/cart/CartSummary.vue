@@ -6,7 +6,10 @@ const cartStore = useCartStore()
 
 const showCheckoutForm = ref(false)
 const showSuccessBox = ref(false)
+const showErrorBox = ref(false)
+
 const successMessage = ref('')
+const errorMessage = ref('')
 
 const fullName = ref('Nipuni Dinushika')
 const phoneNumber = ref('+94 77 123 4567')
@@ -21,17 +24,73 @@ const cvv = ref('123')
 function openCheckoutForm() {
   showCheckoutForm.value = true
   showSuccessBox.value = false
+  showErrorBox.value = false
   successMessage.value = ''
+  errorMessage.value = ''
 }
 
 function closeCheckoutForm() {
   showCheckoutForm.value = false
+  showSuccessBox.value = false
+  showErrorBox.value = false
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+function validateDeliveryDetails() {
+  if (!fullName.value.trim()) return false
+  if (!phoneNumber.value.trim()) return false
+  if (!email.value.trim()) return false
+  if (!address.value.trim()) return false
+  if (!isValidEmail(email.value.trim())) return false
+
+  return true
+}
+
+function validateCardDetails() {
+  const cleanCardNumber = cardNumber.value.replace(/\s/g, '')
+  const cleanDemoCardNumber = '1111222233334444'
+
+  const isCardNumberCorrect = cleanCardNumber === cleanDemoCardNumber
+  const isExpiryCorrect = expiryDate.value.trim() === '12/28'
+  const isCvvCorrect = cvv.value.trim() === '123'
+
+  return isCardNumberCorrect && isExpiryCorrect && isCvvCorrect
+}
+
+function showPaymentError(message: string) {
+  errorMessage.value = message
+  showErrorBox.value = true
+
+  setTimeout(() => {
+    showErrorBox.value = false
+    errorMessage.value = ''
+  }, 2800)
 }
 
 function confirmPayment() {
+  showSuccessBox.value = false
+  showErrorBox.value = false
+
+  if (!validateDeliveryDetails()) {
+    showPaymentError(
+      'Please check your delivery information. All fields must be filled correctly before confirming the order.'
+    )
+    return
+  }
+
+  if (paymentMethod.value === 'card' && !validateCardDetails()) {
+    showPaymentError(
+      'Payment could not be completed. Please check your card number, expiry date, and CVV, then try again.'
+    )
+    return
+  }
+
   successMessage.value =
     paymentMethod.value === 'card'
-      ? 'Payment successful!'
+      ? 'Payment successful! Your order has been confirmed.'
       : 'Order placed successfully with Cash on Delivery!'
 
   showSuccessBox.value = true
@@ -46,7 +105,7 @@ function confirmPayment() {
 
 <template>
   <div class="relative">
-    <div class="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#241f1b]">
+    <div class="rounded-2xl bg-white p-6 shadow-sm dark:bg-[#3a332d]">
       <h2 class="text-2xl font-semibold text-stone-800 dark:text-white">
         Order Summary
       </h2>
@@ -62,7 +121,7 @@ function confirmPayment() {
           <span>${{ cartStore.shipping.toFixed(2) }}</span>
         </div>
 
-        <div class="border-t border-stone-200 pt-4 dark:border-stone-700">
+        <div class="border-t border-stone-200 pt-4 dark:border-[#4a4038]">
           <div class="flex items-center justify-between text-lg font-semibold text-stone-800 dark:text-white">
             <span>Total</span>
             <span>${{ cartStore.total.toFixed(2) }}</span>
@@ -78,12 +137,13 @@ function confirmPayment() {
       </button>
     </div>
 
+    <!-- Checkout Modal -->
     <div
       v-if="showCheckoutForm"
       class="fixed inset-0 z-50 bg-black/40 px-2 py-2 sm:flex sm:items-center sm:justify-center sm:p-4"
     >
       <div
-        class="relative mx-auto h-[96vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-4 shadow-xl sm:h-auto sm:max-h-[90vh] sm:p-5 dark:bg-[#241f1b]"
+        class="relative mx-auto h-[96vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-4 shadow-xl sm:h-auto sm:max-h-[90vh] sm:p-5 dark:bg-[#3a332d]"
       >
         <div class="mb-4 flex items-center justify-between">
           <h3 class="text-xl font-semibold text-stone-800 sm:text-2xl dark:text-white">
@@ -98,12 +158,13 @@ function confirmPayment() {
           </button>
         </div>
 
+        <!-- Success Popup -->
         <div
           v-if="showSuccessBox"
           class="fixed inset-0 z-[60] flex items-center justify-center bg-black/25 px-4"
         >
           <div
-            class="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl dark:bg-[#241f1b]"
+            class="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl dark:bg-[#3a332d]"
           >
             <div
               class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-2xl text-green-600 dark:bg-green-900/30 dark:text-green-300"
@@ -121,7 +182,39 @@ function confirmPayment() {
           </div>
         </div>
 
-        <div class="rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-stone-700">
+        <!-- Error Popup -->
+        <div
+          v-if="showErrorBox"
+          class="fixed inset-0 z-[60] flex items-center justify-center bg-black/25 px-4"
+        >
+          <div
+            class="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-2xl dark:bg-[#3a332d]"
+          >
+            <div
+              class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-2xl text-red-600 dark:bg-red-900/30 dark:text-red-300"
+            >
+              !
+            </div>
+
+            <h4 class="text-lg font-semibold text-stone-800 dark:text-white">
+              Payment Unsuccessful
+            </h4>
+
+            <p class="mt-2 text-sm leading-6 text-stone-600 dark:text-stone-300">
+              {{ errorMessage }}
+            </p>
+
+            <button
+              @click="showErrorBox = false"
+              class="mt-5 rounded-full bg-[#b79a72] px-6 py-2 text-sm font-semibold text-white transition hover:bg-[#a98b64]"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+
+        <!-- Delivery Information -->
+        <div class="rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-[#4a4038]">
           <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
             Delivery Information
           </h4>
@@ -135,7 +228,7 @@ function confirmPayment() {
                 v-model="fullName"
                 type="text"
                 placeholder="Enter full name"
-                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-[#4a4038] dark:bg-[#2b2520] dark:text-white"
               />
             </div>
 
@@ -147,7 +240,7 @@ function confirmPayment() {
                 v-model="phoneNumber"
                 type="text"
                 placeholder="Enter phone number"
-                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-[#4a4038] dark:bg-[#2b2520] dark:text-white"
               />
             </div>
 
@@ -159,7 +252,7 @@ function confirmPayment() {
                 v-model="email"
                 type="email"
                 placeholder="Enter email"
-                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-[#4a4038] dark:bg-[#2b2520] dark:text-white"
               />
             </div>
 
@@ -171,13 +264,14 @@ function confirmPayment() {
                 v-model="address"
                 type="text"
                 placeholder="Enter full address"
-                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-[#4a4038] dark:bg-[#2b2520] dark:text-white"
               />
             </div>
           </div>
         </div>
 
-        <div class="mt-4 rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-stone-700">
+        <!-- Payment Method -->
+        <div class="mt-4 rounded-2xl border border-stone-300 p-4 sm:p-5 dark:border-[#4a4038]">
           <h4 class="mb-4 text-lg font-semibold text-stone-800 dark:text-white">
             Payment Method
           </h4>
@@ -190,7 +284,7 @@ function confirmPayment() {
               :class="
                 paymentMethod === 'card'
                   ? 'border-[#2f6f4f] bg-[#edf7f1] dark:bg-[#1f3328]'
-                  : 'border-stone-300 bg-white dark:border-stone-600 dark:bg-[#2d2824]'
+                  : 'border-stone-300 bg-white dark:border-[#4a4038] dark:bg-[#2b2520]'
               "
             >
               <p class="font-semibold text-stone-800 dark:text-white">Credit/Debit Card</p>
@@ -203,7 +297,7 @@ function confirmPayment() {
               :class="
                 paymentMethod === 'cod'
                   ? 'border-[#2f6f4f] bg-[#edf7f1] dark:bg-[#1f3328]'
-                  : 'border-stone-300 bg-white dark:border-stone-600 dark:bg-[#2d2824]'
+                  : 'border-stone-300 bg-white dark:border-[#4a4038] dark:bg-[#2b2520]'
               "
             >
               <p class="font-semibold text-stone-800 dark:text-white">Cash on Delivery</p>
@@ -219,7 +313,7 @@ function confirmPayment() {
                 v-model="cardNumber"
                 type="text"
                 placeholder="0000 0000 0000 0000"
-                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-[#4a4038] dark:bg-[#2b2520] dark:text-white"
               />
             </div>
 
@@ -231,7 +325,7 @@ function confirmPayment() {
                 v-model="expiryDate"
                 type="text"
                 placeholder="MM/YY"
-                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-[#4a4038] dark:bg-[#2b2520] dark:text-white"
               />
             </div>
 
@@ -243,13 +337,14 @@ function confirmPayment() {
                 v-model="cvv"
                 type="password"
                 placeholder="***"
-                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-stone-600 dark:bg-[#2d2824] dark:text-white"
+                class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm outline-none dark:border-[#4a4038] dark:bg-[#2b2520] dark:text-white"
               />
             </div>
           </div>
         </div>
 
-        <div class="mt-4 flex flex-col gap-3 rounded-2xl border border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-stone-700">
+        <!-- Bottom Bar -->
+        <div class="mt-4 flex flex-col gap-3 rounded-2xl border border-stone-300 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-[#4a4038]">
           <p class="text-xl font-semibold text-stone-800 dark:text-white">
             Total: ${{ cartStore.total.toFixed(2) }}
           </p>
